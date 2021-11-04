@@ -1,34 +1,41 @@
-import react, { useState } from 'react';
-import axios from "axios";
-import posts from './components/posts';
-import './App.css';
+import react, { useState } from "react";
+const App=() =>{
 
-const App = ()=> {
+  const[inputList,setInputList]=useState("");
+  const[Items, setItems]= useState([]);
+  const itemEvent=(event)=>{
 
-  const [posts,setposts]=useState([]);
-  const[loading,setLoading]=useState(false);
-  const[currentPage,setCurrentPage]=useState(1);
-  const[postsPerPage,setPostPerPage]=useState(5);
+    setInputList(event.target.value);
+  };
 
-  useState(()=>{
-    const fetchPosts=async()=>{
-      setLoading(true);
-      const res=await axios.get('https://reqres.in/api/users?page=2');
-      setposts(res.data);
-      setLoading(false);
-    }
-    fetchPosts();
-  },[]);
+  const listOfItems=()=>{
+    setItems((oldItems)=>{
+      return[...oldItems,inputList];
+    });
+    setInputList("");
+  };
+  return(
+    <>
+    <div className="main_div">
+      <div className="center_div">
+        <be/>
+        <h1> TODO List</h1>
+        <br/>
+        <input type="name" placeholder="Add items" 
+        value={inputList}
+        onChange={itemEvent}/>
+        <button onClick={listOfItems}>+</button>
+       
+        <ol>
+     {/*<li>{inputList}</li>*/ }
 
-  const indexOfLastPost=currentPage*postsPerPage;
-  const indexOfFirstPost=indexOfLastPost-postsPerPage;
-  const currentPosts=posts.slice(indexOfFirstPost,indexOfLastPost);
-  return (
-    <div className="container mt--5">
-   <h1 className="text-primary mb-3">my app</h1>
-
-   <posts posts={currentPosts} loading={loading}/>
-   </div>
+      { Items.map((itemval)=> {
+   return <li>{itemval}</li>
+        })}
+        </ol>
+      </div>
+    </div>
+    </>
   );
 };
 
